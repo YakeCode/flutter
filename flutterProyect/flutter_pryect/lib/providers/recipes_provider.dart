@@ -9,6 +9,7 @@ class RecipesProvider extends ChangeNotifier {
 
   bool isLoading = false; // Variable de carga
   List<Recipe> recipes = [];
+  List<Recipe> favoriteRecipe = [];
 
 // get del json
 //Android: 10.0.2.2
@@ -36,6 +37,30 @@ class RecipesProvider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> toggleFavoriteStatus(Recipe recipe) async {
+    final isFavorite = favoriteRecipe.contains(recipe);
+
+    try {
+      final urlFavorites = Uri.parse('http://10.0.2.2:3210/favorites');
+      final response = isFavorite
+          ? await http.delete(urlFavorites, body: jsonEncode({'id': recipe.id}))
+          : await http.post(urlFavorites, body: jsonEncode(recipe.toJSON()));
+
+      if (response.statusCode == 200) {
+        if (isFavorite) {
+          favoriteRecipe.remove(recipe);
+        } else {
+          favoriteRecipe.add(recipe);
+        }
+        notifyListeners();
+      } else {
+        throw Exception('Failed to update favorites');
+      }
+    } catch (e) {
+      print('Error al actualizar estado de receta $e');
     }
   }
 }

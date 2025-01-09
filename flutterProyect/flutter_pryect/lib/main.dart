@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pryect/providers/recipes_provider.dart';
+import 'package:flutter_pryect/screens/favorites/recipes_favorites.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/home/home_screen.dart';
@@ -30,7 +31,7 @@ class RecipeBook extends StatelessWidget {
   @override // constructor de la vista
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 1, // Número de pestañas
+      length: 2, // Número de pestañas
       child: Scaffold(
         //hoja en blanco: scaffold
         appBar: AppBar(
@@ -51,13 +52,15 @@ class RecipeBook extends StatelessWidget {
             unselectedLabelColor: Colors.white,
             tabs: [
               Tab(icon: Icon(Icons.home), text: 'Home'),
+              Tab(
+                icon: Icon(Icons.favorite),
+                text: 'Favorites',
+              )
             ],
           ),
         ),
         body: const TabBarView(
-          children: [
-            HomeScreen(),
-          ],
+          children: [HomeScreen(), FavoritesRecipes()],
         ),
       ),
     );
