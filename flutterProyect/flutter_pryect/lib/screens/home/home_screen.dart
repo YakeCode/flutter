@@ -1,23 +1,39 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pryect/screens/home/recipe_form.dart';
 import 'package:flutter_pryect/screens/recipe_detail/recipe_detail.dart';
-
-const String author = 'Yake';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+// get del json
+// Android: 10.0.2.2
+//IOS 127.0.0.1
+//web localhost
+  Future<List<dynamic>> FetchRecipes() async {
+    final url = Uri.parse('http://10.0.2.2:3210/recipes');
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+    return data['recipes'];
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 4,
         child: Scaffold(
-          body: Column(
-            children: <Widget>[
-              _RecipeCard(context),
-              _RecipeCard(context),
-            ],
-          ),
+          body: FutureBuilder<List<dynamic>>(
+              future: FetchRecipes(),
+              builder: (context, snapshot) {
+                final recipes = snapshot.data ?? [];
+                return ListView.builder(
+                    itemCount: recipes.length,
+                    itemBuilder: (context, index) {
+                      return _RecipeCard(context, recipes[index]);
+                    });
+              }),
           floatingActionButton: FloatingActionButton(
             //botón flotante
             backgroundColor: Colors.orange,
@@ -41,15 +57,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _RecipeCard(BuildContext context) {
+  Widget _RecipeCard(BuildContext context, dynamic recipe) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => RecipeDetail(
-                      recipeName:
-                          'Lasania'))); //navega a la pantalla de detalle y envia la receta
+                      recipeName: recipe[
+                          'name']))); //navega a la pantalla de detalle y envia la receta
         },
         child: Padding(
             padding:
@@ -70,9 +86,10 @@ class HomeScreen extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Image.network(
+                            recipe['image_link']
                             /*Image.asset(
                         '../../assets/images/flutter_lasaña.jpg',*/
-                            'https://static.platzi.com/media/uploads/flutter_lasana_b894f1aee1.jpg',
+                            ,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -87,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                               .start, //alinea los elementos internos a la izquierda
                           children: <Widget>[
                             Text(
-                              'Lasagna',
+                              recipe['name'],
                               style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: 'Quicksand',
@@ -102,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                               color: Colors.orange,
                             ),
                             Text(
-                              'autor: ${author}',
+                              recipe['author'],
                             ),
                           ])
                     ],
