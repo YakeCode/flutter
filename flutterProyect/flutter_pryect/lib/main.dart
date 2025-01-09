@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pryect/providers/recipes_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/home/home_screen.dart';
 
@@ -12,11 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: const RecipeBook(),
-    );
+    return MultiProvider(
+        providers: [ChangeNotifierProvider(create: (_) => RecipesProvider())],
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          home: const RecipeBook(),
+        ));
   }
 }
 
