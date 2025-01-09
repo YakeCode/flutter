@@ -9,18 +9,20 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
 // get del json
-// Android: 10.0.2.2
+//Android: 10.0.2.2
 //IOS 127.0.0.1
 //web localhost
   Future<List<dynamic>> FetchRecipes() async {
     final url = Uri.parse('http://10.0.2.2:3210/recipes');
     try {
-      final response = await http.get(url);
+      final response = await http.get(url); //solicitud http get
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        // Retorna la lista de recetas contenida en la clave 'recipes' del JSON.
         return data['recipes'];
       } else {
         print('Error ${response.statusCode}');
+        // Retorna una lista vacía si hubo un error en la solicitud.
         return [];
       }
     } catch (e) {
@@ -75,8 +77,10 @@ class HomeScreen extends StatelessWidget {
 
   Widget _RecipeCard(BuildContext context, dynamic recipe) {
     return GestureDetector(
+        //eventLisener
         onTap: () {
           Navigator.push(
+              //agrega una nueva ruta
               context,
               MaterialPageRoute(
                   builder: (context) => RecipeDetail(
