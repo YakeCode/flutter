@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
+  final TextEditingController controller; // Aceptamos el controller
+  final String? Function(String?) validator; // Aceptamos el validator
 
-  const CustomTextField({key, required this.label}) : super(key: key);
+  const CustomTextField({
+    Key? key,
+    required this.label,
+    required this.controller,
+    required this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(
@@ -22,6 +32,7 @@ class CustomTextField extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.orange, width: 1),
         ),
       ),
+      validator: validator,
     );
   }
 }

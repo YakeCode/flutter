@@ -2,26 +2,37 @@ import 'package:flutter/material.dart';
 
 class CustomImageUrlField extends StatelessWidget {
   final String label;
+  final TextEditingController controller; // Aceptamos el controller
+  final String? Function(String?) validator; // Aceptamos el validator
 
-  const CustomImageUrlField({key, required this.label}) : super(key: key);
+  const CustomImageUrlField({
+    Key? key,
+    required this.label,
+    required this.controller,
+    required this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller, // Usamos el controller pasado
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontFamily: 'Quicksand',
-          color: const Color.fromARGB(255, 255, 165, 30),
+          color: Color.fromARGB(255, 255, 165, 30),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.orange, width: 1),
+          borderSide: const BorderSide(color: Colors.orange, width: 1),
         ),
       ),
+      validator: validator, // Usamos el validator pasado
     );
   }
 }

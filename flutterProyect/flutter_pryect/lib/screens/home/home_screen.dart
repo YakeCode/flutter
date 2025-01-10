@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: Consumer<RecipesProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading) {
@@ -58,12 +59,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _showBottom(BuildContext context) {
     return showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) => Container(
-        width: MediaQuery.of(context).size.width,
-        height: 500,
-        color: Colors.white,
-        child: RecipeForm(),
-      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 8,
+            right: 8,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: RecipeForm(),
+            ),
+          ),
+        );
+      },
     );
   }
 
