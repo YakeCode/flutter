@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pryect/forms/recipe_form.dart';
 import 'package:flutter_pryect/providers/recipes_provider.dart';
-import 'package:flutter_pryect/screens/home/recipe_form.dart';
 import 'package:flutter_pryect/screens/recipe_detail/recipe_detail.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         width: MediaQuery.of(context).size.width,
         height: 500,
         color: Colors.white,
-        child: ReciperFont(),
+        child: RecipeForm(),
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class RecipesProvider extends ChangeNotifier {
   // escucha los cambios de las llamadas
 
-  bool isLoading = false; // Variable de carga
+  bool isLoading = false;
   List<Recipe> recipes = [];
   List<Recipe> favoriteRecipe = [];
 
@@ -28,7 +28,6 @@ class RecipesProvider extends ChangeNotifier {
             data['recipes'].map((recipe) => Recipe.fromJSON(recipe)));
       } else {
         print('Error ${response.statusCode}');
-        // Retorna una lista vacía si hubo un error en la solicitud.
         recipes = [];
       }
     } catch (e) {
